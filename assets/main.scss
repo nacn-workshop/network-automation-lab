@@ -1,0 +1,75 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+
+@import "{{ site.theme }}";
+
+.page-content a {
+    text-decoration: underline;
+}
+
+.exercise_icon {
+    // border: 1px solid black;
+    border-radius: 6px;
+    background: #2a7ae2;
+    padding: 4px;
+    font-weight: bolder;
+    color: #ffffff;
+    margin-right: 7px;
+}
+
+.exercise_icon .icon {
+    font-size: 1em;
+    color: #aed0fb;
+}
+
+.highlighter-rouge .highlight
+{
+    border-radius: 6px;
+}
+
+.language-terminal .highlight * ,
+{
+    // color: white;
+    background-color: black;
+    background: black;
+    border-radius: 6px;
+    border-color: grey;
+    // border: 1px solid #e8e8e8;
+}
+
+code, pre {
+    font-family: Monaco,"Courier New";
+}
+
+.language-terminal code,
+.language-terminal .highlight .nv,
+.language-terminal .highlight .nb,
+.language-terminal .highlight .nt,
+.language-terminal .highlight .s1,
+.language-terminal .highlight .s2 {
+    color: #FFFFFF;
+}
+
+// .language-terminal .highlight .gp {
+//     color: #00AAFF;
+// }
+
+.language-terminal .highlight .gp,
+.language-terminal .highlight .go {
+    color: #888;
+}
+
+.trigger {
+    display: none;
+}
+
+.footer-heading {
+    display: none;
+}
+
+@media screen and (max-width: 600px) {
+.site-nav {
+    display: none;
+}
+}
