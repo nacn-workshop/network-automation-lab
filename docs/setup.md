@@ -99,9 +99,12 @@ $
 ```terminal
 $ source venv/bin/activate
 (venv) $ pip install napalm
-...[ everything builds successfully ]...
-Successfully installed MarkupSafe-1.1.1 asn1crypto-0.24.0 bcrypt-3.1.6 certifi-2019.3.9 cffi-1.12.3 chardet-3.0.4 cryptography-2.6.1 future-0.17.1 idna-2.8 jinja2-2.10.1 junos-eznc-2.2.1 lxml-4.3.3 napalm-2.4.0 ncclient-0.6.6 netaddr-0.7.19 netmiko-2.3.3 nxapi-plumbing-0.5.2 paramiko-2.4.2 pyIOSXR-0.53 pyYAML-5.1 pyasn1-0.4.5 pycparser-2.19 pyeapi-0.8.2 pynacl-1.3.0 pyserial-3.4 requests-2.22.0 scp-0.13.2 setuptools-41.0.1 six-1.12.0 textfsm-0.4.1 urllib3-1.25.3
+```
 
+This command will produce a lot of output while it installs the package. If it completes successfully, it should finish with this line:
+
+```terminal
+Successfully installed MarkupSafe-1.1.1 asn1crypto-0.24.0 bcrypt-3.1.6 certifi-2019.3.9 cffi-1.12.3 chardet-3.0.4 cryptography-2.6.1 future-0.17.1 idna-2.8 jinja2-2.10.1 junos-eznc-2.2.1 lxml-4.3.3 napalm-2.4.0 ncclient-0.6.6 netaddr-0.7.19 netmiko-2.3.3 nxapi-plumbing-0.5.2 paramiko-2.4.2 pyIOSXR-0.53 pyYAML-5.1 pyasn1-0.4.5 pycparser-2.19 pyeapi-0.8.2 pynacl-1.3.0 pyserial-3.4 requests-2.22.0 scp-0.13.2 setuptools-41.0.1 six-1.12.0 textfsm-0.4.1 urllib3-1.25.3
 ```
 
 <!-- TODO: Add link to virtualenv documentation -->
