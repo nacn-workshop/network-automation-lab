@@ -13,7 +13,7 @@ In order to download the image for the Arista virtual device, you'll have to cre
 
 Once you've done that you can download the latest `vEOS-lab-<version>-virtualbox.box` image from <https://www.arista.com/en/support/software-download>. **The examples below use the `vEOS-lab-4.21.1.1F` image, if you download a different version, update the commands to your version.**
 
-Add it to your vagrant box list, changing the `<version>` to match the one you downloaded:
+Add it to your vagrant box list:
 
 ```terminal
 $ vagrant box add --name vEOS-lab-4.21.1.1F ~/Downloads/vEOS-lab-4.21.1.1F-virtualbox.box
