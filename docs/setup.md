@@ -74,3 +74,10 @@ Check the location of your python command again:
 ```
 
 Again what you see will be different, but notice that the path is now pointing to a python3 command in your virtualenv directory, not a system path.
+
+To get out of the virtual environemnt, use the `deactivate` alias (which is defined in the environemnt):
+
+```terminal
+(venv) $ deactivate
+$
+```
