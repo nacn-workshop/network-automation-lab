@@ -38,6 +38,15 @@ Latest Version: 2.2.4
 You're running an up-to-date version of Vagrant!
 ```
 
+Now install the vagrant-hostmanager plugin:
+
+```terminal
+$ vagrant plugin install vagrant-hostmanager
+Installing the 'vagrant-hostmanager' plugin. This can take a few minutes...
+Fetching: vagrant-hostmanager-1.8.9.gem (100%)
+Installed the plugin 'vagrant-hostmanager (1.8.9)'!
+```
+
 <!-- TODO: Add link to Vagrant documentation -->
 
 # Create a Python virtual environment
