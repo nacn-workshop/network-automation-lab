@@ -203,20 +203,27 @@ management api http-commands
 end
 ```
 
-In order to use the `load_replace.py` script to apply this config, let's activate our Python virtualenv and install the napalm package:
+In order to use the `load_replace.py` script to apply this config, let's activate our Python virtualenv:
 
 ```terminal
 $ source venv/bin/activate
-(venv) $ python -m pip install napalm
 ```
-<!-- TODO get exact command and output-->
+
+And install the napalm package:
+
+```terminal
+(venv) $ python3 -m pip install napalm
+```
+
+This install command will produce a lot of output as it downloads and installs the napalm package.
 
 Now we can run the `load_replace.py` script with the `new_hostname.conf` file as an argument:
 
 ```terminal
-(venv) $ python3 load_replace.py new_hostname.py
+(venv) $ python3 load_replace.py new_hostname.conf
 ```
-<!-- TODO get exact command and output-->
+
+The script will display a diff of the candidate config and ask if you want to apply it. Enter `y` to apply and continue.
 
 Login to the `eos` device again and check the hostname:
 
