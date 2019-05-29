@@ -1,6 +1,6 @@
 # Please change this to match your installed version
 # (use `vagrant box list` to see what you have installed).
-VEOS_BOX = "vEOS-lab-4.18.1F"
+VEOS_BOX = "vEOS-lab-4.21.1.1F"
 
 Vagrant.configure(2) do |config|
 

@@ -36,26 +36,11 @@ The output of this command should include `vEOS-lab-4.21.1.1F  (virtualbox, 0)` 
 Start by creating a file called `Vagratfile` with these contents:
 
 ```ruby
-# Vagrantfile for the quickstart tutorial
-
-# Script configuration:
-#
-# Arista vEOS box.
 # Please change this to match your installed version
 # (use `vagrant box list` to see what you have installed).
-VEOS_BOX = "vEOS-lab-4.18.1F"
+VEOS_BOX = "vEOS-lab-4.21.1.1F"
 
 Vagrant.configure(2) do |config|
-
-  config.vm.define "base" do |base|
-    # This box will be downloaded and added automatically if you don't
-    # have it already.
-    base.vm.box = "hashicorp/precise64"
-    base.vm.network :forwarded_port, guest: 22, host: 12200, id: 'ssh'
-    base.vm.network "private_network", virtualbox__intnet: "link_1", ip: "10.0.1.100"
-    base.vm.network "private_network", virtualbox__intnet: "link_2", ip: "10.0.2.100"
-    base.vm.provision "shell", inline: "apt-get update; apt-get install lldpd -y"
-  end
 
   config.vm.define "eos" do |eos|
     eos.vm.box = VEOS_BOX
