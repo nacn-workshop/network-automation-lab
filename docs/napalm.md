@@ -20,7 +20,7 @@ $ vagrant box add --name vEOS-lab-4.21.1.1F ~/Downloads/vEOS-lab-4.21.1.1F-virtu
 ==> box: Box file was not detected as metadata. Adding it directly...
 ==> box: Adding box 'vEOS-lab-4.21.1.1F' (v0) for provider:
     box: Unpacking necessary files from: file:///Users/username/Downloads/vEOS-lab-4.21.1.1F-virtualbox.box
-    ==> box: Successfully added box 'vEOS-lab-4.21.1.1F' (v0) for 'virtualbox'!
+==> box: Successfully added box 'vEOS-lab-4.21.1.1F' (v0) for 'virtualbox'!
 ```
 
 You can list the boxes available to vagrant:
