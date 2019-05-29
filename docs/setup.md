@@ -20,6 +20,7 @@ $ vboxmanage --version
 
 There is also a GUI that installs with VirtualBox for managing VMs, but we won't be using that in this lab.
 
+<!-- TODO: Add link to VirtualBox documentation -->
 
 # Install Vagrant
 
@@ -36,6 +37,8 @@ Latest Version: 2.2.4
 
 You're running an up-to-date version of Vagrant!
 ```
+
+<!-- TODO: Add link to Vagrant documentation -->
 
 # Create a Python virtual environment
 
@@ -61,7 +64,7 @@ Now activate the virtual environemnt:
 
 ```terminal
 $ source venv/bin/activate
-(venv) $ 
+(venv) $
 ```
 
 Note that your prompt may have changed to add an indicator that you are in an active python virtualenv.
@@ -81,3 +84,5 @@ To get out of the virtual environemnt, use the `deactivate` alias (which is defi
 (venv) $ deactivate
 $
 ```
+
+<!-- TODO: Add link to virtualenv documentation -->
