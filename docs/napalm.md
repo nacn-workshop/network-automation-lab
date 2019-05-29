@@ -5,21 +5,33 @@ layout: page
 
 The Napalm library has a very good intro tutorial, which we will borrow, and use as the foundation for other exercises in this lab.
 
-# Napalm Tutorial Lab Setup
+# Download vEOS vagrant box
 
 The instructions in this section are an abbreviated version of the [Setting up the lab](https://napalm.readthedocs.io/en/latest/tutorials/lab.html) section of the Napalm tutorial.
 
 In order to download the image for the Arista virtual device, you'll have to create an account at <https://www.arista.com/en/user-registration>.
 
-Once you've done that you can download the latest `vEOS-lab-<version>-virtualbox.box` image from <https://www.arista.com/en/support/software-download>.
+Once you've done that you can download the latest `vEOS-lab-<version>-virtualbox.box` image from <https://www.arista.com/en/support/software-download>. **The examples below use the `vEOS-lab-4.21.1.1F` image, if you download a different version, update the commands to your version.**
 
 Add it to your vagrant box list, changing the `<version>` to match the one you downloaded:
 
 ```terminal
-$ vagrant box add --name vEOS-lab-<version>-virtualbox ~/Downloads/vEOS-lab-<version>-virtualbox.box
-$ vagrant box list
-vEOS-lab-quickstart (virtualbox, 0)
+$ vagrant box add --name vEOS-lab-4.21.1.1F ~/Downloads/vEOS-lab-4.21.1.1F-virtualbox.box
+==> box: Box file was not detected as metadata. Adding it directly...
+==> box: Adding box 'vEOS-lab-4.21.1.1F' (v0) for provider:
+    box: Unpacking necessary files from: file:///Users/username/Downloads/vEOS-lab-4.21.1.1F-virtualbox.box
+    ==> box: Successfully added box 'vEOS-lab-4.21.1.1F' (v0) for 'virtualbox'!
 ```
+
+You can list the boxes available to vagrant:
+
+```terminal
+$ vagrant box list
+```
+
+The output of this command should include `vEOS-lab-4.21.1.1F  (virtualbox, 0)` if the previous command succeeded.
+
+# Create Vagrantfile
 
 Start by creating a file called `Vagratfile` with these contents:
 
