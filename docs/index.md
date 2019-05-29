@@ -8,3 +8,4 @@ title: Overview
 
 - [Lab Setup]({{ "setup" | relative_url }})
 - [Experimenting with Napalm]({{ "napalm" | relative_url }})
+- [Experimenting with Ansible]({{ "ansible" | relative_url }})
