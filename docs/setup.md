@@ -48,3 +48,50 @@ Installed the plugin 'vagrant-hostmanager (1.8.9)'!
 ```
 
 <!-- TODO: Add link to Vagrant documentation -->
+
+# Create a Python virtual environment
+
+Next we'll create a virtual environment for python that we'll run directly on our host machine.
+
+```terminal
+$ python3 -m venv venv
+$ ls venv
+bin        include    lib        pyvenv.cfg
+```
+
+Whenever you want to use this environment, you'll need to activate it first. But before you activate, take a look at the existing locations of your python command:
+
+```terminal
+$ which python3
+/usr/local/bin/python3
+```
+
+The path you see may be different, but will probably point to a system location.
+
+Now activate the virtual environemnt:
+
+
+```terminal
+$ source venv/bin/activate
+(venv) $
+```
+
+Note that your prompt may have changed to add an indicator that you are in an active python virtualenv.
+
+Check the location of your python command again:
+
+```terminal
+(venv) $ which python3
+/Users/username/network-automation-intro-lab/venv/bin/python3
+```
+
+Again what you see will be different, but notice that the path is now pointing to a python3 command in your virtualenv directory, not a system path.
+
+To get out of the virtual environemnt, use the `deactivate` alias (which is defined in the environemnt):
+
+```terminal
+(venv) $ deactivate
+$
+```
+
+<!-- TODO: Add link to virtualenv documentation -->
