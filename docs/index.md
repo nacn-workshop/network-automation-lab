@@ -5,5 +5,7 @@
 layout: home
 ---
 
+# Hands-on Lab
+
 - [Lab Setup]({{ "setup" | relative_url }})
 - 
