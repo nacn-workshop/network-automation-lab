@@ -3,9 +3,8 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 layout: home
+title: Overview
 ---
-
-## Hands-on Lab
 
 - [Lab Setup]({{ "setup" | relative_url }})
 - 
