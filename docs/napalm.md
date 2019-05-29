@@ -99,6 +99,29 @@ logout
 Connection to 127.0.0.1 closed.
 ```
 
+# Test Napalm command to verify connectivity
+
+Verify your NAPALM instance is correctly installed and can contact your EOS test device using commands from [NAPALM CLI Documentation](https://napalm.readthedocs.io/en/latest/cli.html)
+
+```terminal
+$ source venv/bin/activate
+(venv) $ napalm --user vagrant --password vagrant --vendor eos 127.0.0.1 --optional_args 'port=12443' call get_facts
+{
+    "hostname": "localhost",
+    "fqdn": "localhost",
+    "vendor": "Arista",
+    "model": "vEOS",
+    "serial_number": "",
+    "os_version": "4.21.1.1F-10146868.42111F",
+    "uptime": 1854,
+    "interface_list": [
+        "Ethernet1",
+        "Ethernet2",
+        "Management1"
+    ]
+}
+```
+
 # Simple Napalm script to load config
 
 Create a new python script called `load_replace.py` with these contents<!-- TDOO: add link to original source ([original source]()) -->:
@@ -204,12 +227,6 @@ In order to use the `load_replace.py` script to apply this config, let's activat
 
 ```terminal
 $ source venv/bin/activate
-```
-
-And install the napalm package:
-
-```terminal
-(venv) $ python3 -m pip install napalm
 ```
 
 This install command will produce a lot of output as it downloads and installs the napalm package.
