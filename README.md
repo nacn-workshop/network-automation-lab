@@ -8,6 +8,6 @@ If you'd like to run a local instance of the tutorial materials, you can use the
 
 ```
 cd docs
-bundle install --path vendor/bundle
+bundle install
 bundle exec jekyll serve
 ```
