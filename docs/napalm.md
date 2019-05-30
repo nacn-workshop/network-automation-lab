@@ -33,10 +33,9 @@ Connection to 127.0.0.1 closed.
 
 # Test Napalm command to verify connectivity
 
-Verify your Napalm instance is correctly installed and can contact your EOS test device using commands from [Napalm CLI Documentation](https://napalm.readthedocs.io/en/latest/cli.html)
+Verify your Napalm instance is correctly installed and can contact your EOS test device using this command: 
 
 ```terminal
-$ source venv/bin/activate
 (venv) $ napalm --user vagrant --password vagrant --vendor eos 127.0.0.1 --optional_args 'port=12443' call get_facts
 {
     "hostname": "localhost",
@@ -53,6 +52,8 @@ $ source venv/bin/activate
     ]
 }
 ```
+
+This command is gathering basic information about the device and displaying it.
 
 # Simple Napalm script to load config
 
@@ -80,3 +81,9 @@ set-with-load-replace-script>exit
 logout
 Connection to 127.0.0.1 closed.
 ```
+
+# Summary
+
+There are several ways to use Napalm to interact with the network devices, via the CLI or in Python scrip, via the CLI or in Python scripts
+
+Refer to the [Napalm Documentation](https://napalm.readthedocs.io/en/latest/) for more information.

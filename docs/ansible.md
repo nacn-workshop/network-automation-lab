@@ -5,8 +5,7 @@ layout: page
 
 *If you haven't already followed the [setup steps]({{ "setup" | relative_url }}), complete those before continuing with this tutorial.*
 
-The commands in this tutorial need the files in the `ansible/` directory: Change
-to it before running the subsequent commands.
+The commands in this part of the tutorial need the files in the `ansible` directory: Change to it before running the subsequent commands.
 
 ```terminal
 $ cd ansible
