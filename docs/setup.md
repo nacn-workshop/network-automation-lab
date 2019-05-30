@@ -210,3 +210,7 @@ Once that is done, verify that you're using the venv's version of Ansible. The o
 Now that VirtualBox and Vagrant are installed, and we're running a vEOS device, we have a place test configurations and commands.
 
 Our python venv now has napalm and ansible installed. This is where we'll do most of our for in this lab.
+
+# Next
+
+Let's continue to the [Experimenting with Napalm]({{ 'napalm' | relative_url }}) exercise.

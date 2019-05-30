@@ -87,3 +87,7 @@ Connection to 127.0.0.1 closed.
 There are several ways to use Napalm to interact with the network devices, via the CLI or in Python scrip, via the CLI or in Python scripts
 
 Refer to the [Napalm Documentation](https://napalm.readthedocs.io/en/latest/) for more information.
+
+# Next
+
+Let's continue to the [Experimenting with Ansible]({{ 'ansible' | relative_url }}) exercise.
