@@ -1,3 +1,5 @@
+# Copied from https://github.com/napalm-automation/napalm/blob/master/docs/tutorials/sample_scripts/load_replace.py
+
 # Sample script to demonstrate loading a config for a device.
 #
 # Note: this script is as simple as possible: it assumes that you have

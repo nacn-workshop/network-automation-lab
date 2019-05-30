@@ -28,7 +28,7 @@ $ vboxmanage --version
 
 There is also a GUI that installs with VirtualBox for managing VMs, but we won't be using that in this lab.
 
-<!-- TODO: Add link to VirtualBox documentation -->
+Refer to the [VirtualBox documentation](https://www.virtualbox.org/wiki/End-user_documentation) for more information.
 
 # Install Vagrant
 
@@ -46,7 +46,7 @@ Latest Version: 2.2.4
 You're running an up-to-date version of Vagrant!
 ```
 
-<!-- TODO: Add link to Vagrant documentation -->
+Refer to the [Vagrant documentation](https://www.vagrantup.com/docs/index.html) for more information.
 
 # Download vEOS vagrant box
 
@@ -149,7 +149,7 @@ $ source venv/bin/activate
 (venv) $
 ```
 
-<!-- TODO: Add link to virtualenv documentation -->
+Refer to the [venv documentation](https://docs.python.org/3/library/venv.html) for more information.
 
 # Install Napalm
 
