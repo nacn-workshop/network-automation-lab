@@ -18,18 +18,23 @@ We can validate that our inventory is formatted correctly and contains all the
 hosts we expect with the following helper command:
 
 ```terminal
-(venv) $ ansible-inventory -i hosts.cfg --list
 {
     "_meta": {
         "hostvars": {
             "eos": {
-                "ansible_connection": "network_cli",
+                "ansible_connection": "network_cli",                                              
                 "ansible_host": "127.0.0.1",
-                "ansible_hostname": set-by-ansible
+                "ansible_hostname": "set-by-ansible",                                             
                 "ansible_network_os": "eos",
                 "ansible_password": "vagrant",
                 "ansible_port": 12201,
-                "ansible_user": "vagrant"
+                "ansible_user": "vagrant",
+                "dns_resolver": "192.168.1.1",
+                "domain_name": "workshop.local",                                                  
+                "ntp_servers": [
+                    "172.16.0.1",
+                    "172.16.0.2"
+                ]
             }
         }
     },
@@ -43,7 +48,8 @@ hosts we expect with the following helper command:
         "hosts": [
             "eos"
         ]
-    }
+    },
+    "ungrouped": {}
 }
 ```
 
@@ -200,6 +206,7 @@ can use that variable to configure the hostname of the device itself.  We're
 going to use the playbook `change_hostname.yml` in this repo to change the
 hostname of our EOS device using of the `eos_config` module:
 
+
 ```terminal
 (venv) $ ansible-playbook change_hostname.yml -i hosts.cfg --diff
 
@@ -240,3 +247,72 @@ the devices' configuration.  Let's take a moment to examine the contents of the
       eos_config:
         lines: "hostname {% raw %}{{ ansible_hostname }}{% endraw %}"
 ```
+
+Note that here we're passing the "lines:" argument to the `eos_config` module,
+and that the value of our config lines is another string that is using Jinja2
+templating syntax.  In this case, the `ansible_hostname` variable will be
+replaced with the variable we manually specified in our `host_vars` file for our
+EOS device, resulting in a single config command of "hostname set-by-ansible" as
+it would be typed by hand on the device CLI.  Let's make these even more
+interesting.  Suppose we would like to configure more than just a single
+configuration line?  We could continue to grow our playbook file by adding
+additional lines to our `eos_config` module arguments, but it would make more
+sense to move those lines to their own file so that we don't have to change the
+playbook directly.  All that is requried to do this is to change the "lines:"
+argument to "src:" and point that to a template file somewhere:
+
+```yaml
+- hosts: eos
+  gather_facts: False
+
+  tasks:
+    - name: ensure hostname matches 'ansible_hostname' in host_vars
+      eos_config:
+        src: './ntp_dns_template.j2'
+```
+
+Let's see what's going on in that template...
+
+
+```jinja
+{% raw %}{% for server in ntp_servers %}{% endraw %}
+{% raw %}ntp server {{ server }}{% endraw %}
+{% raw %}{% endfor %}{% endraw %}
+{% raw %}ip name-server {{ dns_resolver }}{% endraw %}
+```
+
+We're getting a bit more complicated now as we've introduced another useful
+Jinja2 construct: looping.  Back up again to our `eos_facts` output, and recall
+the value of the "ntp_servers" group_var you saw.  There were two servers listed
+here in between square-brackets.  This is a list, and we can loop over each
+element of this list using the jinja2 for/endfor syntax.  In this instance, what
+we expect to end up with is two NTP servers, and one name server.  Let's run the
+playbook and find out:
+
+```terminal
+(venv) $ ansible-playbook -i hosts.cfg change_dns_ntp.yml -CD
+
+PLAY [eos] ****************************************************************************************
+
+TASK [configure NTP, DNS settings] ****************************************************************
+--- system:/running-config
++++ session:/ansible_1559187925-session-config
+@@ -5,6 +5,10 @@
+ transceiver qsfp default-mode 4x10G
+ !
+ hostname set-by-ansible
++ip name-server vrf default 192.168.1.1
++!
++ntp server 172.16.0.1
++ntp server 172.16.0.2
+ !
+ spanning-tree mode mstp
+ !
+changed: [eos]
+
+PLAY RECAP ****************************************************************************************
+eos                        : ok=1    changed=1    unreachable=0    failed=0
+```
+
+et voila!  We have added three lines to our configuration, two additional NTP
+servers, and one DNS resolver.
