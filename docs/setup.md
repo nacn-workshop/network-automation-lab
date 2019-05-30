@@ -15,7 +15,7 @@ This will create a directory called `network-automation-intro-lab-2019`. *The re
 
 # Install VirtualBox
 
-VirtualBox is a cross-platform virtualization tool. This will allow us to run virtual servers and devices in a private, virtual lab.
+VirtualBox is a cross-platform virtualization tool. This will allow us to run a device in a private, virtual lab.
 
   - [Download and install VirtualBox](https://www.virtualbox.org/)
 
@@ -50,9 +50,13 @@ Refer to the [Vagrant documentation](https://www.vagrantup.com/docs/index.html) 
 
 (The instructions in this section are an abbreviated version of the [Setting up the lab](https://napalm.readthedocs.io/en/latest/tutorials/lab.html) section of the Napalm tutorial.)
 
-In order to download the image for an Arista virtual device, you'll have to create an account at <https://www.arista.com/en/user-registration>.
+In order to download the image for an Arista virtual device, you'll have to create an account at:
+  - <https://www.arista.com/en/user-registration>
 
-Once you've done that you can download the latest `vEOS-lab-<version>-virtualbox.box` image from <https://www.arista.com/en/support/software-download>. **The examples below use the `vEOS-lab-4.21.1.1F` image, if you download a different version, update the commands to your version.**
+Once you've done that, you can download the latest `vEOS-lab-<version>-virtualbox.box` image from:
+  - <https://www.arista.com/en/support/software-download>
+
+**The examples below use the `vEOS-lab-4.21.1.1F` image, if you download a different version, update the commands to your version.**
 
 Add it to your vagrant box list:
 
@@ -86,7 +90,7 @@ The lab files include a `Vagrantfile` which defines exactly how to boot the virt
 $ vagrant up
 ```
 
-This command will take a while to run and will produce a lot of output. When it is finished you should have a virtual device running in VirtualBox. Vagrant uses VirtualBox as its default provider, so if VirtualBox is installed you don't need to do anything special to tell Vagrant to use it.
+This command will take a while to run and will produce a lot of output. When it is finished you should have a virtual device running in VirtualBox.
 
 You can use vagrant's `status` command to list the current status of the VMs defined in your Vagrantfile:
 
@@ -111,11 +115,6 @@ $ python3 -m venv venv
 
 This command creates a directory called "venv" and populates it with the directories and files needed for a Python environment.
 
-```terminal
-$ ls venv
-bin        include    lib        pyvenv.cfg
-```
-
 Whenever you want to use this environment, you'll need to activate it first. But before you activate, take a look at the existing locations of your python command:
 
 ```terminal
@@ -133,7 +132,29 @@ $ source venv/bin/activate
 (venv) $
 ```
 
-Note that your prompt may have changed to add an indicator that you are in an active python venv:
+Note that your prompt may have changed to add an indicator that you are in an active python venv. This indicator uses the name of the venv directory you specified in the command to create the environment.
+
+Let's take a look at what's in the venv directory:
+
+```terminal
+(venv) $ ls venv
+bin        include    lib        pyvenv.cfg
+(venv) $ ls venv/bin
+activate         activate.fish    easy_install-3.7 pip3             python
+activate.csh     easy_install     pip              pip3.7           python3
+(venv) $ ls venv/lib/python3.7/site-packages/
+__pycache__                 pip-19.0.3.dist-info        setuptools-40.8.0.dist-info
+easy_install.py             pkg_resources
+pip                         setuptools
+```
+
+Also take a look at your environment's PATH variable:
+
+```terminal
+(venv) $ echo $PATH
+```
+
+The first entry should be a reference to the `bin` directory in the venv directory.
 
 Check the location of your python command again:
 
