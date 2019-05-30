@@ -22,8 +22,7 @@ eos
 
 It defines a group ("switches") with a single host in it ("eos").
 
-We can validate that our inventory is formatted correctly and contains all the
-hosts we expect with the following helper command:
+We can validate that our inventory is formatted correctly and contains all the hosts we expect with the following helper command:
 
 ```terminal
 {
@@ -63,8 +62,7 @@ hosts we expect with the following helper command:
 
 # Run a one-off Ansible command
 
-Ansible has some built-in modules for interacting with EOS devices. We can use
-one of them, `eos_info`, to get some information about our virtual device:
+Ansible has some built-in modules for interacting with EOS devices. We can use one of them, `eos_info`, to get some information about our virtual device:
 
 ```terminal
 (venv) $ ansible -i hosts.cfg eos -m eos_facts
@@ -171,17 +169,9 @@ eos | SUCCESS => {
 }
 ```
 
-In this example, we've used the `-a` flag to specify and additional argument to
-the `eos_command` module that is the command we want to run.  Also, note in the
-return output from ansible, we've recieved the data in two different formats.
-In the "stdout" key, we can see the raw string contents of the "show version"
-command, as well as a separate "stdout_lines" key that contains the native
-output as it would be seen on the EOS CLI.
+In this example, we've used the `-a` flag to specify and additional argument to the `eos_command` module that is the command we want to run. Also, note in the return output from ansible, we've recieved the data in two different formats. In the "stdout" key, we can see the raw string contents of the "show version" command, as well as a separate "stdout_lines" key that contains the native output as it would be seen on the EOS CLI.
 
-Running ad-hoc commands in this fashion can be useful for running quick one-off
-tasks, but once you start to configure a modules behavior with additional
-arguments, using Ansible playbooks becomes a much more manageable solution.
-Let's examine what a playbook to perform that same show command looks like:
+Running ad-hoc commands in this fashion can be useful for running quick one-off tasks, but once you start to configure a modules behavior with additional arguments, using Ansible playbooks becomes a much more manageable solution. Let's examine what a playbook to perform that same show command looks like: 
 
 ```yaml
 - hosts: eos
@@ -198,25 +188,14 @@ Let's examine what a playbook to perform that same show command looks like:
 ```
 
 Let's break down what's going on here.
-- We're writing this file in the YAML format
-- The "hosts" key at the top of this file is indicating which hosts in our
-  inventory this playbook applies to.
-- the "tasks" key contains a list of Ansible "tasks", e.g. modules, that we are
-  invoking on our EOS device.
-- In this example, we're using the optional "name" key at the top of each task
-  to provide a description about what we're intending to accomplish with each
-  task
-- We're again invoking the same `eos_command` module, and then specifying our
-  `commands` argument as a separate key indented below the module name.
-- We're using a task-level optional argument "register" to save the resulting
-  output from the `eos_command` module to a variable named "version".
-- Finally, we use another module named `debug` to print out the contents of the
-  variable named "version" to the console.
-- You might have noticed the double-braces surrounding the "version" variable:
-  this is how we reference variables in the Jinja2 templating language.  These
-  braces tell Ansible that it should treat the name "version" as a variable, and
-  to attempt to resolve the name inside the braces to the contents of the output
-  of the "show version" command.
+  - We're writing this file in the YAML format
+  - The "hosts" key at the top of this file is indicating which hosts in our inventory this playbook applies to.
+  - the "tasks" key contains a list of Ansible "tasks", e.g. modules, that we are invoking on our EOS device.
+  - In this example, we're using the optional "name" key at the top of each task to provide a description about what we're intending to accomplish with each task
+  - We're again invoking the same `eos_command` module, and then specifying our `commands` argument as a separate key indented below the module name.
+  - We're using a task-level optional argument "register" to save the resulting output from the `eos_command` module to a variable named "version".
+  - Finally, we use another module named `debug` to print out the contents of the variable named "version" to the console.
+  - You might have noticed the double-braces surrounding the "version" variable: this is how we reference variables in the Jinja2 templating language. These braces tell Ansible that it should treat the name "version" as a variable, and to attempt to resolve the name inside the braces to the contents of the output of the "show version" command.
 
 Try running this playbook with the following command:
 
@@ -268,12 +247,7 @@ The output is similar to the one-off command, but each task is run and displayed
 
 # Setting the hostname with a playbook 
 
-Now that you're familiar with playbooks, let's do something a little more
-interesting.  Recall in our ad hoc call to Ansible's `get_facts` module, we had
-a host-var that was "ansible\_hostname" set to a value of "set-by-ansible".  We
-can use that variable to configure the hostname of the device itself.  We're
-going to use the playbook `change_hostname.yml` in this repo to change the
-hostname of our EOS device using of the `eos_config` module:
+Now that you're familiar with playbooks, let's do something a little more interesting. Recall in our ad hoc call to Ansible's `get_facts` module, we had a host-var that was "ansible\_hostname" set to a value of "set-by-ansible". We can use that variable to configure the hostname of the device itself. We're going to use the playbook `change_hostname.yml` in this repo to change the hostname of our EOS device using of the `eos_config` module:
 
 
 ```terminal
@@ -299,13 +273,7 @@ PLAY RECAP *********************************************************************
 eos                        : ok=1    changed=1    unreachable=0    failed=0
 ```
 
-Note that in this case, we passed our ansible-playbook command an additional
-flag, `--diff`.  This is a very useful flag when we're using modules that change
-the state of a device.  If the device supports it, Ansible can return a diff of
-what it actually changed on the remote device.  In this instance, we can see two
-lines prefixed with a "+" character, indicating that these lines were added to
-the devices' configuration.  Let's take a moment to examine the contents of the
-`change_hostname.yml` playbook:
+Note that in this case, we passed our ansible-playbook command an additional flag, `--diff`. This is a very useful flag when we're using modules that change the state of a device. If the device supports it, Ansible can return a diff of what it actually changed on the remote device. In this instance, we can see two lines prefixed with a "+" character, indicating that these lines were added to the devices' configuration. Let's take a moment to examine the contents of the `change_hostname.yml` playbook:
 
 ```yaml
 - hosts: eos
@@ -317,22 +285,11 @@ the devices' configuration.  Let's take a moment to examine the contents of the
         lines: "hostname {% raw %}{{ ansible_hostname }}{% endraw %}"
 ```
 
-Note that here we're passing the "lines:" argument to the `eos_config` module,
-and that the value of our config lines is another string that is using Jinja2
-templating syntax.  In this case, the `ansible_hostname` variable will be
-replaced with the variable we manually specified in our `host_vars` file for our
-EOS device, resulting in a single config command of "hostname set-by-ansible" as
-it would be typed by hand on the device CLI. 
+Note that here we're passing the "lines:" argument to the `eos_config` module, and that the value of our config lines is another string that is using Jinja2 templating syntax. In this case, the `ansible_hostname` variable will be replaced with the variable we manually specified in our `host_vars` file for our EOS device, resulting in a single config command of "hostname set-by-ansible" as it would be typed by hand on the device CLI. 
 
 # Using a template to set multiple configuration lines
 
-Let's make these even more interesting.  Suppose we would like to configure
-more than just a single configuration line?  We could continue to grow our
-playbook file by adding additional lines to our `eos_config` module arguments,
-but it would make more sense to move those lines to their own file so that we
-don't have to change the playbook directly.  All that is requried to do this is
-to change the "lines:" argument to "src:" and point that to a template file
-somewhere:
+Let's make these even more interesting. Suppose we would like to configure more than just a single configuration line?  We could continue to grow our playbook file by adding additional lines to our `eos_config` module arguments, but it would make more sense to move those lines to their own file so that we don't have to change the playbook directly. All that is requried to do this is to change the "lines:" argument to "src:" and point that to a template file somewhere:
 
 ```yaml
 - hosts: eos
@@ -354,8 +311,7 @@ Let's see what's going on in that template...
 {% raw %}ip name-server {{ dns_resolver }}{% endraw %}
 ```
 
-We're getting a bit more complicated now as we've introduced another useful
-Jinja2 construct: looping. 
+We're getting a bit more complicated now as we've introduced another useful Jinja2 construct: looping. 
 
 The `ntp_servers` and `dns_resolver` variables are defined in the file in group\_vars/switches.yml. The values define in this file are available as variables to all the hosts listed in the associated group.
 
@@ -368,9 +324,9 @@ dns_resolver: 192.168.1.1
 domain_name: workshop.org
 ```
 
-<!-- Back up again to our `eos_facts` output, and recall the value of the "ntp_servers" group_var you saw. There were two servers listed here in between square-brackets.  This is a list, and we can loop over each element of this list using the jinja2 for/endfor syntax. -->
+<!-- Back up again to our `eos_facts` output, and recall the value of the "ntp_servers" group_var you saw. There were two servers listed here in between square-brackets. This is a list, and we can loop over each element of this list using the jinja2 for/endfor syntax. -->
 
-In this instance, what we expect to end up with is two NTP servers, and one name server.  Let's run the playbook and find out:
+In this instance, what we expect to end up with is two NTP servers, and one name server. Let's run the playbook and find out:
 
 ```terminal
 (venv) $ ansible-playbook -i hosts.cfg change_dns_ntp.yml -CD
@@ -397,8 +353,7 @@ PLAY RECAP *********************************************************************
 eos                        : ok=1    changed=1    unreachable=0    failed=0
 ```
 
-Et voila!  We have added three lines to our configuration, two additional NTP
-servers, and one DNS resolver.
+Et voila!  We have added three lines to our configuration, two additional NTP servers, and one DNS resolver.
 
 # Summary
 
