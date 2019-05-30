@@ -162,7 +162,7 @@ Let's examine what a playbook to perform that same show command looks like:
 
     - name: print results of "show version" command to console
       debug:
-        msg: "{{ version }}"
+        msg: {{ version }}
 ```
 
 Let's break down what's going on here.
