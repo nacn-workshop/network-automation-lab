@@ -17,10 +17,10 @@ Add it to your vagrant box list:
 
 ```terminal
 $ vagrant box add --name vEOS-lab-4.21.1.1F ~/Downloads/vEOS-lab-4.21.1.1F-virtualbox.box
-==> box: Box file was not detected as metadata. Adding it directly...
-==> box: Adding box 'vEOS-lab-4.21.1.1F' (v0) for provider:
+==﹥ box: Box file was not detected as metadata. Adding it directly...
+==﹥ box: Adding box 'vEOS-lab-4.21.1.1F' (v0) for provider:
     box: Unpacking necessary files from: file:///Users/username/Downloads/vEOS-lab-4.21.1.1F-virtualbox.box
-==> box: Successfully added box 'vEOS-lab-4.21.1.1F' (v0) for 'virtualbox'!
+==﹥ box: Successfully added box 'vEOS-lab-4.21.1.1F' (v0) for 'virtualbox'!
 ```
 
 You can list the boxes available to vagrant:
@@ -36,26 +36,19 @@ The output of this command should include `vEOS-lab-4.21.1.1F  (virtualbox, 0)` 
 Start by creating a file called `Vagratfile` with these contents:
 
 ```ruby
-# Please change this to match your installed version
-# (use `vagrant box list` to see what you have installed).
-VEOS_BOX = "vEOS-lab-4.21.1.1F"
-
 Vagrant.configure(2) do |config|
-
   config.vm.define "eos" do |eos|
-    eos.vm.box = VEOS_BOX
+    eos.vm.box = "vEOS-lab-4.21.1.1F"
     eos.vm.network :forwarded_port, guest: 22, host: 12201, id: 'ssh'
     eos.vm.network :forwarded_port, guest: 443, host: 12443, id: 'https'
-    eos.vm.network "private_network", virtualbox__intnet: "link_1", ip: "169.254.1.11", auto_config: false
-    eos.vm.network "private_network", virtualbox__intnet: "link_2", ip: "169.254.1.11", auto_config: false
+    eos.vm.provider "virtualbox" do |vbox|
+      vbox.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
+    end
   end
-
 end
 ```
 
-Make sure you change the `VEOS_BOX` variable to match the version number of the vEOS image you downloaded.
-
-Use the vagrant command to start these virtual machines:
+Use the vagrant command to start the virtual device:
 
 ```terminal
 $ vagrant up
@@ -69,7 +62,6 @@ You can use vagrant's `status` command to list the current status of the VMs def
 $ vagrant status
 Current machine states:
 
-base                      running (virtualbox)
 eos                       running (virtualbox)
 
 This environment represents multiple VMs. The VMs are all listed

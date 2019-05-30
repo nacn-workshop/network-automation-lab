@@ -3,7 +3,15 @@ title: Lab Setup
 layout: page
 ---
 
-We will start by setting up a virtual environment to work in using VirtualBox, Vagrant, and a virtual Arista device.
+# Clone Lab Files
+
+To get the files used in these tutorials, clone the project repository:
+
+```terminal
+$ git clone https://github.com/nacn-workshop/network-automation-intro-lab-2019.git
+```
+
+This will create a directory called `network-automation-intro-lab-2019`. *The rest of the lab instructions will assume you are starting in this directory.*
 
 # Install VirtualBox
 
