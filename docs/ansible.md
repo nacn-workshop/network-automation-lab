@@ -29,15 +29,15 @@ We can validate that our inventory is formatted correctly and contains all the h
     "_meta": {
         "hostvars": {
             "eos": {
-                "ansible_connection": "network_cli",                                              
+                "ansible_connection": "network_cli",
                 "ansible_host": "127.0.0.1",
-                "ansible_hostname": "set-by-ansible",                                             
+                "ansible_hostname": "set-by-ansible",
                 "ansible_network_os": "eos",
                 "ansible_password": "vagrant",
                 "ansible_port": 12201,
                 "ansible_user": "vagrant",
                 "dns_resolver": "192.168.1.1",
-                "domain_name": "workshop.local",                                                  
+                "domain_name": "workshop.local",
                 "ntp_servers": [
                     "172.16.0.1",
                     "172.16.0.2"
@@ -145,24 +145,24 @@ We can further expand on this example by running arbitrary show commands with th
 ```terminal
 (venv) $ $ ansible -i hosts.cfg eos -m eos_command -a "commands='show version'"
 eos | SUCCESS => {
-    "changed": false, 
+    "changed": false,
     "stdout": [
         "Arista vEOS\nHardware version:    \nSerial number:       \nSystem MAC address:  0800.277b.25dd\n\nSoftware image version: 4.21.1.1F\nArchitecture:           i386\nInternal build version: 4.21.1.1F-10146868.42111F\nInternal build ID:      ed3973a9-79db-4acc-b9ac-19b9622d23e2\n\nUptime:                 0 weeks, 0 days, 0 hours and 42 minutes\nTotal memory:           2016612 kB\nFree memory:            1391180 kB"
-    ], 
+    ],
     "stdout_lines": [
         [
-            "Arista vEOS", 
-            "Hardware version:    ", 
-            "Serial number:       ", 
-            "System MAC address:  0800.277b.25dd",                                                
-            "", 
-            "Software image version: 4.21.1.1F",                                                  
-            "Architecture:           i386", 
-            "Internal build version: 4.21.1.1F-10146868.42111F",                                  
-            "Internal build ID:      ed3973a9-79db-4acc-b9ac-19b9622d23e2",                       
-            "", 
-            "Uptime:                 0 weeks, 0 days, 0 hours and 42 minutes",                    
-            "Total memory:           2016612 kB",                                                 
+            "Arista vEOS",
+            "Hardware version:    ",
+            "Serial number:       ",
+            "System MAC address:  0800.277b.25dd",
+            "",
+            "Software image version: 4.21.1.1F",
+            "Architecture:           i386",
+            "Internal build version: 4.21.1.1F-10146868.42111F",
+            "Internal build ID:      ed3973a9-79db-4acc-b9ac-19b9622d23e2",
+            "",
+            "Uptime:                 0 weeks, 0 days, 0 hours and 42 minutes",
+            "Total memory:           2016612 kB",
             "Free memory:            1391180 kB"
         ]
     ]
@@ -171,7 +171,9 @@ eos | SUCCESS => {
 
 In this example, we've used the `-a` flag to specify and additional argument to the `eos_command` module that is the command we want to run. Also, note in the return output from ansible, we've recieved the data in two different formats. In the "stdout" key, we can see the raw string contents of the "show version" command, as well as a separate "stdout_lines" key that contains the native output as it would be seen on the EOS CLI.
 
-Running ad-hoc commands in this fashion can be useful for running quick one-off tasks, but once you start to configure a modules behavior with additional arguments, using Ansible playbooks becomes a much more manageable solution. Let's examine what a playbook to perform that same show command looks like: 
+Running ad hoc commands in this fashion can be useful for running quick one-off tasks, but once you start to configure a modules behavior with additional arguments, using Ansible playbooks becomes a much more manageable solution.
+
+Let's examine what a playbook to perform that same show command looks like:
 
 ```yaml
 - hosts: eos
@@ -239,13 +241,13 @@ ok: [eos] => {
 }
 
 PLAY RECAP **********************************************************************************************************
-eos                        : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+eos                        : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
 ```
 
 The output is similar to the one-off command, but each task is run and displayed separately, and an overall summary of the playbook run is printed at the end of the output.
 
-# Setting the hostname with a playbook 
+# Setting the hostname with a playbook
 
 Now that you're familiar with playbooks, let's do something a little more interesting. Recall in our ad hoc call to Ansible's `get_facts` module, we had a host-var that was "ansible\_hostname" set to a value of "set-by-ansible". We can use that variable to configure the hostname of the device itself. We're going to use the playbook `change_hostname.yml` in this repo to change the hostname of our EOS device using of the `eos_config` module:
 
@@ -285,7 +287,7 @@ Note that in this case, we passed our ansible-playbook command an additional fla
         lines: "hostname {% raw %}{{ ansible_hostname }}{% endraw %}"
 ```
 
-Note that here we're passing the "lines:" argument to the `eos_config` module, and that the value of our config lines is another string that is using Jinja2 templating syntax. In this case, the `ansible_hostname` variable will be replaced with the variable we manually specified in our `host_vars` file for our EOS device, resulting in a single config command of "hostname set-by-ansible" as it would be typed by hand on the device CLI. 
+Note that here we're passing the "lines:" argument to the `eos_config` module, and that the value of our config lines is another string that is using Jinja2 templating syntax. In this case, the `ansible_hostname` variable will be replaced with the variable we manually specified in our `host_vars` file for our EOS device, resulting in a single config command of "hostname set-by-ansible" as it would be typed by hand on the device CLI.
 
 # Using a template to set multiple configuration lines
 
@@ -311,7 +313,7 @@ Let's see what's going on in that template...
 {% raw %}ip name-server {{ dns_resolver }}{% endraw %}
 ```
 
-We're getting a bit more complicated now as we've introduced another useful Jinja2 construct: looping. 
+We're getting a bit more complicated now as we've introduced another useful Jinja2 construct: looping.
 
 The `ntp_servers` and `dns_resolver` variables are defined in the file in group\_vars/switches.yml. The values define in this file are available as variables to all the hosts listed in the associated group.
 
