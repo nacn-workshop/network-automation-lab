@@ -162,7 +162,7 @@ Let's examine what a playbook to perform that same show command looks like:
 
     - name: print results of "show version" command to console
       debug:
-        msg: {{ version }}
+        msg: {% raw %}"{{ version }}"{% endraw %}
 ```
 
 Let's break down what's going on here.
@@ -238,5 +238,5 @@ the devices' configuration.  Let's take a moment to examine the contents of the
   tasks:
     - name: ensure hostname matches 'ansible_hostname' in host_vars
       eos_config:
-        lines: "hostname {{ ansible_hostname }}"
+        lines: "hostname {% raw %}{{ ansible_hostname }}{% endraw %}"
 ```
