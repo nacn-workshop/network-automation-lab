@@ -1,0 +1,7 @@
+- hosts: eos
+  gather_facts: False
+
+  tasks:
+    - name: configure NTP, DNS settings
+      eos_config:
+        src: './ntp_dns_template.j2'
