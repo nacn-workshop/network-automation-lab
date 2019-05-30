@@ -13,6 +13,13 @@ This lab has several objectives:
      - an environment to install tools to interact with the device
   2. Provide working examples with these tools
 
+# Windows Note
+
+These instructions and examples are targeted at Unix-style operating systems like Linux and macOS. If you are following along on Windows, you will need to adapt the commands appropriately.
+
+  - You could also use the [Windows Subsystem for Linux (WSL)](https://docs.microsoft.com/en-us/windows/wsl/faq).
+  - The bash emulation that comes with [Git for Windows](https://gitforwindows.org/) is also sometimes a good workaround. 
+
 # Lab Exercises
 
   - [Lab Setup]({{ "setup" | relative_url }})
