@@ -25,6 +25,7 @@ It defines a group ("switches") with a single host in it ("eos").
 We can validate that our inventory is formatted correctly and contains all the hosts we expect with the following helper command:
 
 ```terminal
+(venv) $ ansible-inventory -i hosts.cfg --list
 {
     "_meta": {
         "hostvars": {
@@ -37,7 +38,7 @@ We can validate that our inventory is formatted correctly and contains all the h
                 "ansible_port": 12201,
                 "ansible_user": "vagrant",
                 "dns_resolver": "192.168.1.1",
-                "domain_name": "workshop.local",
+                "domain_name": "workshop.org",
                 "ntp_servers": [
                     "172.16.0.1",
                     "172.16.0.2"
@@ -62,7 +63,7 @@ We can validate that our inventory is formatted correctly and contains all the h
 
 # Run a one-off Ansible command
 
-Ansible has some built-in modules for interacting with EOS devices. We can use one of them, `eos_info`, to get some information about our virtual device:
+Ansible has some built-in modules for interacting with EOS devices. We can use one of them, `eos_facts`, to get some information about our virtual device:
 
 ```terminal
 (venv) $ ansible -i hosts.cfg eos -m eos_facts
@@ -169,9 +170,18 @@ eos | SUCCESS => {
 }
 ```
 
-In this example, we've used the `-a` flag to specify and additional argument to the `eos_command` module that is the command we want to run. Also, note in the return output from ansible, we've recieved the data in two different formats. In the "stdout" key, we can see the raw string contents of the "show version" command, as well as a separate "stdout_lines" key that contains the native output as it would be seen on the EOS CLI.
+In this example, we've used the `-a` flag to specify and additional argument to
+the `eos_command` module that is the command we want to run. Also, note in the
+return output from ansible, we've recieved the data in two different formats. In
+the "stdout" key, we can see the raw string contents of the "show version"
+command, as well as a separate "stdout_lines" key that contains the native
+output as it would be seen on the EOS CLI(in this case, Ansible has split the
+contents of the raw string into a list based on newlines, with each element of
+the list being a separate line of output).
 
-Running ad hoc commands in this fashion can be useful for running quick one-off tasks, but once you start to configure a modules behavior with additional arguments, using Ansible playbooks becomes a much more manageable solution.
+Running ad hoc commands in this fashion can be useful for running quick one-off
+tasks, but once you start to configure a modules behavior with additional
+arguments, using Ansible playbooks becomes a much more manageable solution.
 
 Let's examine what a playbook to perform that same show command looks like:
 
