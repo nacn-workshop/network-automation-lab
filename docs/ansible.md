@@ -25,6 +25,7 @@ hosts we expect with the following helper command:
             "eos": {
                 "ansible_connection": "network_cli",
                 "ansible_host": "127.0.0.1",
+                "ansible_hostname": set-by-ansible
                 "ansible_network_os": "eos",
                 "ansible_password": "vagrant",
                 "ansible_port": 12201,
@@ -144,3 +145,80 @@ return output from ansible, we've recieved the data in two different formats.
 In the "stdout" key, we can see the raw string contents of the "show version"
 command, as well as a separate "stdout_lines" key that contains the native
 output as it would be seen on the EOS CLI.
+
+Running ad-hoc commands in this fashion can be useful for running quick one-off
+tasks, but once you start to configure a modules behavior with additional
+arguments, using Ansible playbooks becomes a much more manageable solution.
+Let's examine what a playbook to perform that same show command looks like:
+
+```terminal
+- hosts: eos
+
+  tasks:
+    - name: get output of "show version" command
+      eos_command:
+        commands: "show version"
+      register: version
+
+    - name: print results of "show version" command to console
+      debug:
+        msg: "{{ version }}"
+```
+
+Let's break down what's going on here.
+- We're writing this file in the YAML format
+- The "hosts" key at the top of this file is indicating which hosts in our
+  inventory this playbook applies to.
+- the "tasks" key contains a list of Ansible "tasks", e.g. modules, that we are
+  invoking on our EOS device.
+- In this example, we're using the optional "name" key at the top of each task
+  to provide a description about what we're intending to accomplish with each
+  task
+- We're again invoking the same `eos_command` module, and then specifying our
+  `commands` argument as a separate key indented below the module name.
+- We're using a task-level optional argument "register" to save the resulting
+  output from the `eos_command` module to a variable names "version".
+- Finally, we use another module named `debug` to print out the contents of the
+  variable named "version" to the console.
+- You might have noticed the double-braces surrounding the "version" variable:
+  this is how we reference variables in the Jinja2 templating language.  These
+  braces tell Ansible that it should treat the name "version" as a variable, and
+  to attempt to resolve the name inside the braces to the contents of the output
+  of the "show version" command.
+
+Try running this playbook with the following command, and note how it is
+functionally equivalent to the previous ad-hoc command.
+
+```terminal
+(venv) $ ansible-playbook show_version.yml -i hosts.cfg
+```
+
+Now that you're familiar with playbooks, let's do something a little more
+interesting.  Recall in our ad-hoc call to Ansible's `get_facts` module, we had
+a host-var that was "ansible_hostname" set to a value of "set-by-ansible".  We
+can use that variable to configure the hostname of the device itself.  We're
+going to use the playbook `change_hostname.yml` in this repo to change the
+hostname of our EOS device using of the `eos_config` module:
+
+```terminal
+(venv) $ ansible-playbook change_hostname.yml -i hosts.cfg -D
+
+PLAY [eos] ****************************************************************************************
+
+TASK [ensure hostname matches 'ansible_hostname' in host_vars] ************************************
+--- system:/running-config
++++ session:/ansible_1559183494-session-config
+@@ -3,6 +3,8 @@
+ ! boot system flash:/vEOS-lab.swi
+ !
+ transceiver qsfp default-mode 4x10G
++!
++hostname set-by-ansible
+ !
+ spanning-tree mode mstp
+ !
+changed: [eos]
+
+PLAY RECAP ****************************************************************************************
+eos                        : ok=1    changed=1    unreachable=0    failed=0
+```

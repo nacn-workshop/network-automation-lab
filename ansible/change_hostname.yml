@@ -1,0 +1,7 @@
+- hosts: eos
+  gather_facts: False
+
+  tasks:
+    - name: ensure hostname matches 'ansible_hostname' in host_vars
+      eos_config:
+        lines: "hostname {{ ansible_hostname }}"

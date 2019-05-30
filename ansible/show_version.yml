@@ -1,0 +1,11 @@
+- hosts: eos
+
+  tasks:
+    - name: get output of "show version" command
+      eos_command:
+        commands: "show version"
+      register: version
+
+    - name: print results of "show version" command to console
+      debug:
+        msg: "{{ version }}"
