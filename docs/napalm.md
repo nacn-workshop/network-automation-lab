@@ -3,73 +3,13 @@ title: Experiment with Napalm
 layout: page
 ---
 
-The Napalm library has a very good intro tutorial, which we will borrow, and use as the foundation for other exercises in this lab.
+*If you haven't already followed the [setup steps]({{ "setup" | relative_url }}), complete those before continuing with this tutorial.*
 
-# Download vEOS vagrant box
-
-The instructions in this section are an abbreviated version of the [Setting up the lab](https://napalm.readthedocs.io/en/latest/tutorials/lab.html) section of the Napalm tutorial.
-
-In order to download the image for the Arista virtual device, you'll have to create an account at <https://www.arista.com/en/user-registration>.
-
-Once you've done that you can download the latest `vEOS-lab-<version>-virtualbox.box` image from <https://www.arista.com/en/support/software-download>. **The examples below use the `vEOS-lab-4.21.1.1F` image, if you download a different version, update the commands to your version.**
-
-Add it to your vagrant box list:
+The commands in this part of the tutorial need the files in the `napalm` directory: Change to it before running the subsequent commands.
 
 ```terminal
-$ vagrant box add --name vEOS-lab-4.21.1.1F ~/Downloads/vEOS-lab-4.21.1.1F-virtualbox.box
-==﹥ box: Box file was not detected as metadata. Adding it directly...
-==﹥ box: Adding box 'vEOS-lab-4.21.1.1F' (v0) for provider:
-    box: Unpacking necessary files from: file:///Users/username/Downloads/vEOS-lab-4.21.1.1F-virtualbox.box
-==﹥ box: Successfully added box 'vEOS-lab-4.21.1.1F' (v0) for 'virtualbox'!
+$ cd napalm
 ```
-
-You can list the boxes available to vagrant:
-
-```terminal
-$ vagrant box list
-```
-
-The output of this command should include `vEOS-lab-4.21.1.1F  (virtualbox, 0)` if the previous command succeeded.
-
-# Create Vagrantfile
-
-Start by creating a file called `Vagratfile` with these contents:
-
-```ruby
-Vagrant.configure(2) do |config|
-  config.vm.define "eos" do |eos|
-    eos.vm.box = "vEOS-lab-4.21.1.1F"
-    eos.vm.network :forwarded_port, guest: 22, host: 12201, id: 'ssh'
-    eos.vm.network :forwarded_port, guest: 443, host: 12443, id: 'https'
-    eos.vm.provider "virtualbox" do |vbox|
-      vbox.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
-    end
-  end
-end
-```
-
-Use the vagrant command to start the virtual device:
-
-```terminal
-$ vagrant up
-```
-
-This command will take a while to run and will produce a lot of output. When it is finished you should have two virtual machines running in VirtualBox. Vagrant uses VirtualBox as its default provider, so if VirtualBox is installed you don't need to do anything special to tell Vagrant to use it.
-
-You can use vagrant's `status` command to list the current status of the VMs defined in your Vagrantfile:
-
-```terminal
-$ vagrant status
-Current machine states:
-
-eos                       running (virtualbox)
-
-This environment represents multiple VMs. The VMs are all listed
-above with their current state. For more information about a specific
-VM, run `vagrant status NAME`.
-```
-
-Now that we have a virtual lab running, let's experiment with that `eos` device.
 
 # Login to vEOS device
 
