@@ -341,7 +341,7 @@ domain_name: workshop.org
 In this instance, what we expect to end up with is two NTP servers, and one name server. Let's run the playbook and find out:
 
 ```terminal
-(venv) $ ansible-playbook -i hosts.cfg change_dns_ntp.yml -CD
+(venv) $ ansible-playbook -i hosts.cfg change_dns_ntp.yml --diff
 
 PLAY [eos] ****************************************************************************************
 
