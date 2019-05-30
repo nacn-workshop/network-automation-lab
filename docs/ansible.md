@@ -151,7 +151,7 @@ tasks, but once you start to configure a modules behavior with additional
 arguments, using Ansible playbooks becomes a much more manageable solution.
 Let's examine what a playbook to perform that same show command looks like:
 
-```terminal
+```yaml
 - hosts: eos
 
   tasks:
@@ -201,7 +201,7 @@ going to use the playbook `change_hostname.yml` in this repo to change the
 hostname of our EOS device using of the `eos_config` module:
 
 ```terminal
-(venv) $ ansible-playbook change_hostname.yml -i hosts.cfg -D
+(venv) $ ansible-playbook change_hostname.yml -i hosts.cfg --diff
 
 PLAY [eos] ****************************************************************************************
 
@@ -221,4 +221,22 @@ changed: [eos]
 
 PLAY RECAP ****************************************************************************************
 eos                        : ok=1    changed=1    unreachable=0    failed=0
+```
+
+Note that in this case, we passed our ansible-playbook command an additional
+flag, `--diff`.  This is a very useful flag when we're using modules that change
+the state of a device.  If the device supports it, Ansible can return a diff of
+what it actually changed on the remote device.  In this instance, we can see two
+lines prefixed with a "+" character, indicating that these lines were added to
+the devices' configuration.  Let's take a moment to examine the contents of the
+`change_hostname.yml` playbook:
+
+```yaml
+- hosts: eos
+  gather_facts: False
+
+  tasks:
+    - name: ensure hostname matches 'ansible_hostname' in host_vars
+      eos_config:
+        lines: "hostname {{ ansible_hostname }}"
 ```
