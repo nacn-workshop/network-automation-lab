@@ -86,6 +86,8 @@ The output of this command should now include `vEOS-lab-4.21.1.1F  (virtualbox, 
 
 The lab files include a `Vagrantfile` which defines exactly how to boot the virtual device. Use the vagrant command to start the virtual device:
 
+**Make sure you're in the directory that has the Vagrantfile**
+
 ```terminal
 $ vagrant up
 ```
