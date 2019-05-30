@@ -322,13 +322,17 @@ and that the value of our config lines is another string that is using Jinja2
 templating syntax.  In this case, the `ansible_hostname` variable will be
 replaced with the variable we manually specified in our `host_vars` file for our
 EOS device, resulting in a single config command of "hostname set-by-ansible" as
-it would be typed by hand on the device CLI.  Let's make these even more
-interesting.  Suppose we would like to configure more than just a single
-configuration line?  We could continue to grow our playbook file by adding
-additional lines to our `eos_config` module arguments, but it would make more
-sense to move those lines to their own file so that we don't have to change the
-playbook directly.  All that is requried to do this is to change the "lines:"
-argument to "src:" and point that to a template file somewhere:
+it would be typed by hand on the device CLI. 
+
+# Using a template to set multiple configuration lines
+
+Let's make these even more interesting.  Suppose we would like to configure
+more than just a single configuration line?  We could continue to grow our
+playbook file by adding additional lines to our `eos_config` module arguments,
+but it would make more sense to move those lines to their own file so that we
+don't have to change the playbook directly.  All that is requried to do this is
+to change the "lines:" argument to "src:" and point that to a template file
+somewhere:
 
 ```yaml
 - hosts: eos
@@ -351,12 +355,22 @@ Let's see what's going on in that template...
 ```
 
 We're getting a bit more complicated now as we've introduced another useful
-Jinja2 construct: looping.  Back up again to our `eos_facts` output, and recall
-the value of the "ntp_servers" group_var you saw.  There were two servers listed
-here in between square-brackets.  This is a list, and we can loop over each
-element of this list using the jinja2 for/endfor syntax.  In this instance, what
-we expect to end up with is two NTP servers, and one name server.  Let's run the
-playbook and find out:
+Jinja2 construct: looping. 
+
+The `ntp_servers` and `dns_resolver` variables are defined in the file in group\_vars/switches.yml. The values define in this file are available as variables to all the hosts listed in the associated group.
+
+```yaml
+---
+ntp_servers:
+  - 172.16.0.1
+  - 172.16.0.2
+dns_resolver: 192.168.1.1
+domain_name: workshop.org
+```
+
+<!-- Back up again to our `eos_facts` output, and recall the value of the "ntp_servers" group_var you saw. There were two servers listed here in between square-brackets.  This is a list, and we can loop over each element of this list using the jinja2 for/endfor syntax. -->
+
+In this instance, what we expect to end up with is two NTP servers, and one name server.  Let's run the playbook and find out:
 
 ```terminal
 (venv) $ ansible-playbook -i hosts.cfg change_dns_ntp.yml -CD
@@ -383,5 +397,9 @@ PLAY RECAP *********************************************************************
 eos                        : ok=1    changed=1    unreachable=0    failed=0
 ```
 
-et voila!  We have added three lines to our configuration, two additional NTP
+Et voila!  We have added three lines to our configuration, two additional NTP
 servers, and one DNS resolver.
+
+# Summary
+
+We used several techniques to let Ansible manage settings on the network device. Ultimately the power of templating the configuration by drawing on variables from a data source (like host and group vars in this case) is where the power of this technique begins to really pay off.
