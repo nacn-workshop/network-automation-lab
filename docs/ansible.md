@@ -13,6 +13,15 @@ $ cd ansible
 
 # Validate your inventory
 
+The lab files include a file called `hosts.cfg` which is our Ansible inventory.
+
+```
+[switches]
+eos
+```
+
+It defines a group ("switches") with a single host in it ("eos").
+
 We can validate that our inventory is formatted correctly and contains all the
 hosts we expect with the following helper command:
 
@@ -108,8 +117,26 @@ Let's break down what's happening with this command:
   - The `eos` part is specifying with host to target.
   - The `-m eos_facts` part is telling Ansible to run the eos\_facts module.
 
-We can further expand on this example by running arbitrary show commands with
-the `eos_command` module:
+# How was Ansible able to connect to the virtual device?
+
+The only thing in the inventory file for this host is "eos". How does Ansible connect and authenticate to the device? There are some extra settings defined in a "hosts\_vars" file in host\_vars/eos.yml:
+
+```yaml
+---
+ansible_host: 127.0.0.1
+ansible_port: 12201
+ansible_user: vagrant
+ansible_password: vagrant
+ansible_connection: network_cli
+ansible_network_os: eos
+ansible_hostname: set-by-ansible
+```
+
+We will cover host\_vars below, for now it's enough to know these are here and that Ansible uses these `ansible_` variables to connect to the device.
+
+# A more complicated one-off command
+
+We can further expand on this example by running arbitrary show commands with the `eos_command` module:
 
 ```terminal
 (venv) $ $ ansible -i hosts.cfg eos -m eos_command -a "commands='show version'"
@@ -176,7 +203,7 @@ Let's break down what's going on here.
 - We're again invoking the same `eos_command` module, and then specifying our
   `commands` argument as a separate key indented below the module name.
 - We're using a task-level optional argument "register" to save the resulting
-  output from the `eos_command` module to a variable names "version".
+  output from the `eos_command` module to a variable named "version".
 - Finally, we use another module named `debug` to print out the contents of the
   variable named "version" to the console.
 - You might have noticed the double-braces surrounding the "version" variable:
@@ -185,16 +212,59 @@ Let's break down what's going on here.
   to attempt to resolve the name inside the braces to the contents of the output
   of the "show version" command.
 
-Try running this playbook with the following command, and note how it is
-functionally equivalent to the previous ad-hoc command.
+Try running this playbook with the following command:
 
 ```terminal
 (venv) $ ansible-playbook show_version.yml -i hosts.cfg
+
+PLAY [eos] **********************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************
+ok: [eos]
+
+TASK [get output of "show version" command] *************************************************************************
+ok: [eos]
+
+TASK [print results of "show version" command to console] ***********************************************************
+ok: [eos] => {
+    "msg": {
+        "changed": false,
+        "failed": false,
+        "stdout": [
+            "Arista vEOS\nHardware version:    \nSerial number:       \nSystem MAC address:  0800.277b.25dd\n\nSoftware image version: 4.21.1.1F\nArchitecture:           i386\nInternal build version: 4.21.1.1F-10146868.42111F\nInternal build ID:      ed3973a9-79db-4acc-b9ac-19b9622d23e2\n\nUptime:                 0 weeks, 0 days, 0 hours and 56 minutes\nTotal memory:           2016612 kB\nFree memory:            1377960 kB"
+        ],
+        "stdout_lines": [
+            [
+                "Arista vEOS",
+                "Hardware version:    ",
+                "Serial number:       ",
+                "System MAC address:  0800.277b.25dd",
+                "",
+                "Software image version: 4.21.1.1F",
+                "Architecture:           i386",
+                "Internal build version: 4.21.1.1F-10146868.42111F",
+                "Internal build ID:      ed3973a9-79db-4acc-b9ac-19b9622d23e2",
+                "",
+                "Uptime:                 0 weeks, 0 days, 0 hours and 56 minutes",
+                "Total memory:           2016612 kB",
+                "Free memory:            1377960 kB"
+            ]
+        ]
+    }
+}
+
+PLAY RECAP **********************************************************************************************************
+eos                        : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
 ```
 
+The output is similar to the one-off command, but each task is run and displayed separately, and an overall summary of the playbook run is printed at the end of the output.
+
+# Setting the hostname with a playbook 
+
 Now that you're familiar with playbooks, let's do something a little more
-interesting.  Recall in our ad-hoc call to Ansible's `get_facts` module, we had
-a host-var that was "ansible_hostname" set to a value of "set-by-ansible".  We
+interesting.  Recall in our ad hoc call to Ansible's `get_facts` module, we had
+a host-var that was "ansible\_hostname" set to a value of "set-by-ansible".  We
 can use that variable to configure the hostname of the device itself.  We're
 going to use the playbook `change_hostname.yml` in this repo to change the
 hostname of our EOS device using of the `eos_config` module:
